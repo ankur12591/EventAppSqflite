@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class EventList extends StatefulWidget {
   Note note;
 
-  _callMethod(BuildContext context) => createState()._delete(context, note);
+  //_callMethod(BuildContext context) => createState()._delete(context, note);
 
   @override
   _EventListState createState() => _EventListState();
@@ -83,7 +83,8 @@ class _EventListState extends State<EventList> {
                         height: 10,
                       ),
                       SingleChildScrollView(
-                        child: Container(// color: Colors.blue,
+                        child: Container(
+                          // color: Colors.blue,
                           height: MediaQuery.of(context).size.height - 100,
                           //height: 512,
                           child:
@@ -119,7 +120,8 @@ class _EventListState extends State<EventList> {
   Widget notesListView2() {
     TextStyle titleStyle = Theme.of(context).textTheme.subtitle1;
     return SingleChildScrollView(
-      child: Container(// color: Colors.green,
+      child: Container(
+        // color: Colors.green,
         child: ListView.builder(
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
@@ -131,7 +133,7 @@ class _EventListState extends State<EventList> {
                   navigateToDetail(this.noteList[position], 'Edit note');
                 },
                 child: Container(
-                //  height: MediaQuery.of(context).size.height,
+                  //  height: MediaQuery.of(context).size.height,
                   height: 150,
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.only(bottom: 16),
@@ -140,7 +142,8 @@ class _EventListState extends State<EventList> {
                       borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     children: <Widget>[
-                      Container(  //color: Colors.deepOrangeAccent,
+                      Container(
+                        //color: Colors.deepOrangeAccent,
                         padding: EdgeInsets.only(left: 16),
                         width: MediaQuery.of(context).size.width - 26,
                         child: Column(
@@ -156,7 +159,7 @@ class _EventListState extends State<EventList> {
                               height: 8,
                             ),
                             Container(
-                             // color: Colors.blue,
+                              // color: Colors.blue,
                               child: Row(
                                 children: <Widget>[
                                   Image.asset(
@@ -168,7 +171,7 @@ class _EventListState extends State<EventList> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                     // width: MediaQuery.of(context).size.width - 80,
+                                      // width: MediaQuery.of(context).size.width - 80,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -176,7 +179,8 @@ class _EventListState extends State<EventList> {
                                           Text(
                                             this.noteList[position].date,
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 15),
+                                                color: Colors.white,
+                                                fontSize: 15),
                                           ),
 
                                           //SizedBox(width: 15,),
@@ -191,8 +195,80 @@ class _EventListState extends State<EventList> {
                                                 ),
                                               ),
                                               onTap: () {
-                                                _delete(
-                                                    context, noteList[position]);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) => Dialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    child: Container(
+                                                      height: 200,
+                                                      child: Column(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              color: Colors
+                                                                  .white70,
+                                                              child: Icon(
+                                                                Icons
+                                                                    .delete_rounded,
+                                                                size: 50,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              color: Colors
+                                                                  .deepOrangeAccent,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        16.0),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      "Do you want to delete?",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              15),
+                                                                    ),
+                                                                    RaisedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        _delete(
+                                                                            context,
+                                                                            noteList[position]);
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      color: Colors
+                                                                          .white,
+                                                                      child: Text(
+                                                                          'Delete'),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+
+                                                // _delete(context, noteList[position]);
                                               }),
                                         ],
                                       ),
@@ -224,7 +300,8 @@ class _EventListState extends State<EventList> {
                                         this.noteList[position].address,
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 15),
-                                      ),],
+                                      ),
+                                    ],
                                   ),
                                 )
                               ],
@@ -320,5 +397,58 @@ class _EventListState extends State<EventList> {
         });
       });
     });
+  }
+}
+
+class Delete extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          height: 200,
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.white70,
+                  child: Icon(
+                    Icons.delete_rounded,
+                    size: 50,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.deepOrangeAccent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Do you want to delete?",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            // _delete(context, noteList[position]);
+                          },
+                          color: Colors.white,
+                          child: Text('Delete'),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

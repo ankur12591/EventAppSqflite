@@ -5,14 +5,13 @@ import 'package:new_event/models/note.dart';
 import 'package:new_event/utils/database_helper.dart';
 
 class NoteDetail extends StatefulWidget {
-  final String appBarTitle;
   final Note note;
-
-  NoteDetail(this.note, this.appBarTitle);
+  final appBarTitle;
+  NoteDetail(this.note,this.appBarTitle );
 
   @override
   _NoteDetailState createState() =>
-      _NoteDetailState(this.note, this.appBarTitle);
+      _NoteDetailState(this.note, this.appBarTitle );
 }
 
 class _NoteDetailState extends State<NoteDetail> {
@@ -32,7 +31,7 @@ class _NoteDetailState extends State<NoteDetail> {
 
   DateTime _dateTime = DateTime.now();
 
-  _selectedEventDate(BuildContext context) async {
+  Future<void> _selectedEventDate(BuildContext context) async {
     var _pickedDate = await showDatePicker(
         context: context,
         initialDate: _dateTime,
@@ -48,14 +47,19 @@ class _NoteDetailState extends State<NoteDetail> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    TextStyle textStyle = Theme.of(context).textTheme.title;
+  void initState() {
+    // TODO: implement initState
 
     titleController.text = note.title;
     descriptionController.text = note.description;
     addressController.text = note.address;
     dateTimeController.text = note.date;
 
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
         // Control Things when user press Back button
@@ -102,9 +106,9 @@ class _NoteDetailState extends State<NoteDetail> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                debugPrint('Delete Button Clicked');
-                _delete();
-              });
+                  debugPrint('Delete Button Clicked');
+                  _delete();
+                });
               },
               child: Container(
                 color: Colors.transparent,
@@ -188,11 +192,12 @@ class _NoteDetailState extends State<NoteDetail> {
           child: TextField(
             controller: dateTimeController,
             decoration: InputDecoration(
-              hintText: 'Pick a date',
+              // hintText: 'Pick a date',
               prefixIcon: InkWell(
                   onTap: () {
                     _selectedEventDate(context);
-                    FocusScope.of(context).unfocus();
+                    // _selectedEventDate(context);
+                    // FocusScope.of(context).unfocus();
                   },
                   child: Icon(Icons.calendar_today_rounded)),
               labelText: 'Date',
@@ -359,11 +364,10 @@ class _NoteDetailState extends State<NoteDetail> {
   void _save() async {
     moveToLastScreen();
     note.title = titleController.text;
-    //note.date = dateTimeController.text;
+    // note.date = dateTimeController.text;
     note.description = descriptionController.text;
     note.address = addressController.text;
 
-//    note.date = DateFormat.yMMMd().format(_dateTime);
     note.date = DateFormat.yMMMd().format(_dateTime);
 
     int result;
@@ -397,7 +401,7 @@ class _NoteDetailState extends State<NoteDetail> {
     if (result != 0) {
       _showAlertDialog('Status', 'Note Deleted Successfully');
     } else {
-      _showAlertDialog('Stayus', 'Error occured while Deleting Note');
+      _showAlertDialog('Status', 'Error occured while Deleting Note');
     }
   }
 
